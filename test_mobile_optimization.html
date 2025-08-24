@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手機優化測試</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(#a7eaff, #f0f8ff);
+            min-height: 100vh;
+        }
+        
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .test-section {
+            margin: 24px 0;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+        
+        .test-section h2 {
+            color: #333;
+            margin-top: 0;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 8px;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin: 16px 0;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .feature-card h3 {
+            color: #007bff;
+            margin-top: 0;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status.warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status.info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+        
+        .demo-area {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin: 16px 0;
+        }
+        
+        .touch-test {
+            background: #e3f2fd;
+            border: 2px solid #2196f3;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 16px 0;
+            text-align: center;
+        }
+        
+        .touch-zone {
+            display: inline-block;
+            width: 80px;
+            height: 80px;
+            margin: 8px;
+            border: 2px solid #2196f3;
+            border-radius: 8px;
+            background: #bbdefb;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s ease;
+        }
+        
+        .touch-zone:active {
+            transform: scale(0.9);
+            background: #90caf9;
+        }
+        
+        .touch-zone.active {
+            background: #42a5f5;
+            transform: scale(1.1);
+        }
+        
+        .responsive-demo {
+            background: #fff3e0;
+            border: 2px solid #ff9800;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 16px 0;
+        }
+        
+        .screen-size {
+            background: #ff9800;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 8px 0;
+        }
+        
+        .device-info {
+            background: #f3e5f5;
+            border: 2px solid #9c27b0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 16px 0;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+        
+        .info-item {
+            background: white;
+            padding: 12px;
+            border-radius: 6px;
+            border: 1px solid #e1bee7;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            color: #7b1fa2;
+            margin-bottom: 4px;
+        }
+        
+        .info-value {
+            color: #333;
+            font-family: monospace;
+        }
+        
+        @media (max-width: 768px) {
+            .test-container {
+                margin: 10px;
+                padding: 16px;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .touch-zone {
+                width: 60px;
+                height: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>📱 手機優化功能測試</h1>
+        
+        <div class="test-section">
+            <h2>🎯 功能概覽</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>觸控支援</h3>
+                    <p>支援手機觸控操作，左半邊移動、右半邊移動、上半邊跳躍</p>
+                    <span class="status success">已實現</span>
+                </div>
+                <div class="feature-card">
+                    <h3>響應式設計</h3>
+                    <p>自動適應不同螢幕尺寸，手機、平板、桌面都有最佳體驗</p>
+                    <span class="status success">已實現</span>
+                </div>
+                <div class="feature-card">
+                    <h3>手機 UI 優化</h3>
+                    <p>按鈕大小、文字大小、間距都針對手機進行優化</p>
+                    <span class="status success">已實現</span>
+                </div>
+                <div class="feature-card">
+                    <h3>觸控提示</h3>
+                    <p>遊戲開始時顯示觸控控制說明，幫助玩家快速上手</p>
+                    <span class="status success">已實現</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🖐️ 觸控功能測試</h2>
+            <div class="touch-test">
+                <h3>觸控區域測試</h3>
+                <p>點擊或觸控以下區域來測試觸控功能：</p>
+                <div>
+                    <div class="touch-zone" data-action="left">← 左移</div>
+                    <div class="touch-zone" data-action="right">右移 →</div>
+                    <div class="touch-zone" data-action="jump">↑ 跳躍</div>
+                </div>
+                <div id="touch-result" style="margin-top: 16px; font-weight: bold; color: #2196f3;"></div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>📱 響應式設計測試</h2>
+            <div class="responsive-demo">
+                <h3>螢幕尺寸檢測</h3>
+                <div class="screen-size" id="screen-size">檢測中...</div>
+                <p>調整瀏覽器視窗大小或旋轉手機來測試響應式效果</p>
+                <div id="responsive-info"></div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🔍 設備信息檢測</h2>
+            <div class="device-info">
+                <div class="info-grid" id="device-info">
+                    <div class="info-item">
+                        <div class="info-label">設備類型</div>
+                        <div class="info-value" id="device-type">檢測中...</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">觸控支援</div>
+                        <div class="info-value" id="touch-support">檢測中...</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">螢幕解析度</div>
+                        <div class="info-value" id="screen-resolution">檢測中...</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">視窗大小</div>
+                        <div class="info-value" id="window-size">檢測中...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🎮 遊戲整合測試</h2>
+            <div class="demo-area">
+                <h3>遊戲功能整合</h3>
+                <p>所有優化功能都已整合到主遊戲中</p>
+                <a href="index.html" style="display: inline-block; background: #007bff; color: white; padding: 12px 24px; text-decoration: none; border-radius: 6px; margin: 16px 0;">🎮 開始遊戲</a>
+                <p><small>在遊戲中體驗觸控支援、響應式設計和手機優化</small></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 觸控測試
+        const touchZones = document.querySelectorAll('.touch-zone');
+        const touchResult = document.getElementById('touch-result');
+        
+        touchZones.forEach(zone => {
+            zone.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                zone.classList.add('active');
+                const action = zone.dataset.action;
+                touchResult.textContent = `觸控檢測: ${action} 動作`;
+                
+                setTimeout(() => {
+                    zone.classList.remove('active');
+                }, 200);
+            });
+            
+            zone.addEventListener('click', (e) => {
+                zone.classList.add('active');
+                const action = zone.dataset.action;
+                touchResult.textContent = `點擊檢測: ${action} 動作`;
+                
+                setTimeout(() => {
+                    zone.classList.remove('active');
+                }, 200);
+            });
+        });
+        
+        // 響應式測試
+        function updateResponsiveInfo() {
+            const screenSize = document.getElementById('screen-size');
+            const responsiveInfo = document.getElementById('responsive-info');
+            
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            
+            let deviceType, cssClass;
+            if (width <= 768) {
+                deviceType = '📱 手機';
+                cssClass = '手機優化樣式';
+            } else if (width <= 1024) {
+                deviceType = '📱 平板';
+                cssClass = '平板優化樣式';
+            } else {
+                deviceType = '💻 桌面';
+                cssClass = '桌面樣式';
+            }
+            
+            screenSize.textContent = `${deviceType} (${width} x ${height})`;
+            responsiveInfo.innerHTML = `
+                <p><strong>當前應用:</strong> ${cssClass}</p>
+                <p><strong>CSS 媒體查詢:</strong> ${width <= 768 ? 'max-width: 768px' : width <= 1024 ? 'min-width: 769px and max-width: 1024px' : 'min-width: 1025px'}</p>
+            `;
+        }
+        
+        // 設備信息檢測
+        function updateDeviceInfo() {
+            const deviceType = document.getElementById('device-type');
+            const touchSupport = document.getElementById('touch-support');
+            const screenResolution = document.getElementById('screen-resolution');
+            const windowSize = document.getElementById('window-size');
+            
+            // 設備類型檢測
+            const userAgent = navigator.userAgent;
+            let device = '未知';
+            if (/Android/i.test(userAgent)) device = '📱 Android';
+            else if (/iPhone|iPad|iPod/i.test(userAgent)) device = '📱 iOS';
+            else if (/Windows/i.test(userAgent)) device = '💻 Windows';
+            else if (/Mac/i.test(userAgent)) device = '💻 macOS';
+            else if (/Linux/i.test(userAgent)) device = '🐧 Linux';
+            
+            deviceType.textContent = device;
+            
+            // 觸控支援檢測
+            const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            touchSupport.textContent = hasTouch ? '✅ 支援' : '❌ 不支援';
+            
+            // 螢幕解析度
+            screenResolution.textContent = `${screen.width} x ${screen.height}`;
+            
+            // 視窗大小
+            windowSize.textContent = `${window.innerWidth} x ${window.innerHeight}`;
+        }
+        
+        // 初始化
+        window.addEventListener('load', () => {
+            updateResponsiveInfo();
+            updateDeviceInfo();
+        });
+        
+        // 監聽視窗大小變化
+        window.addEventListener('resize', () => {
+            updateResponsiveInfo();
+            updateDeviceInfo();
+        });
+        
+        // 監聽螢幕方向變化
+        if (window.orientation !== undefined) {
+            window.addEventListener('orientationchange', () => {
+                setTimeout(() => {
+                    updateResponsiveInfo();
+                    updateDeviceInfo();
+                }, 100);
+            });
+        }
+    </script>
+</body>
+</html>

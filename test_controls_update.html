@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>控制說明更新測試</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div style="text-align: center; padding: 50px; color: white; text-shadow: 2px 2px 0 #000;">
+        <h1>🎮 控制說明更新測試</h1>
+        <p>這個頁面展示更新後的"How to Play"控制說明</p>
+        
+        <div style="margin: 30px 0;">
+            <h2>📋 新的控制說明格式</h2>
+            <div style="background: rgba(0,0,0,0.5); padding: 30px; border-radius: 10px; display: inline-block; text-align: left;">
+                <h3 style="color: #FFD700; margin: 0 0 20px 0;">Basic Controls</h3>
+                <p style="margin: 10px 0; font-size: 18px;">↑ Jump　← → Move</p>
+                
+                <h3 style="color: #FFD700; margin: 30px 0 20px 0;">Quiz Interaction</h3>
+                <p style="margin: 10px 0; font-size: 18px;">↑ ↓ Navigate answer choices</p>
+                <p style="margin: 10px 0; font-size: 18px;">Press Enter to answer or continue</p>
+            </div>
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <h2>🔄 主要變化</h2>
+            <ul style="text-align: left; display: inline-block;">
+                <li>✅ <strong>標題更新</strong>: "Controls" → "Basic Controls"</li>
+                <li>✅ <strong>簡化說明</strong>: 移除冗長的描述文字</li>
+                <li>✅ <strong>分類清晰</strong>: 分為兩個主要類別</li>
+                <li>✅ <strong>格式優化</strong>: 更易讀的排版</li>
+            </ul>
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <h2>📝 詳細對比</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 20px 0;">
+                <div style="background: rgba(255, 0, 0, 0.3); padding: 20px; border-radius: 10px; border: 2px solid #ff0000;">
+                    <h3>❌ 舊版本</h3>
+                    <p><strong>Controls</strong></p>
+                    <ul style="text-align: left;">
+                        <li>↑ Up: Jump</li>
+                        <li>← → Left/Right: Move</li>
+                        <li>Avoid obstacles on the ground</li>
+                        <li>Jump to touch floating bubbles and trigger quiz dialogues</li>
+                        <li>Press Enter to select an answer or proceed to the next step</li>
+                    </ul>
+                </div>
+                
+                <div style="background: rgba(0, 255, 0, 0.3); padding: 20px; border-radius: 10px; border: 2px solid #00ff00;">
+                    <h3>✅ 新版本</h3>
+                    <p><strong>Basic Controls</strong></p>
+                    <ul style="text-align: left;">
+                        <li>↑ Jump　← → Move</li>
+                    </ul>
+                    <p><strong>Quiz Interaction</strong></p>
+                    <ul style="text-align: left;">
+                        <li>↑ ↓ Navigate answer choices</li>
+                        <li>Press Enter to answer or continue</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <h2>🔧 技術實現</h2>
+            <p><strong>修改位置：</strong></p>
+            <pre style="background: rgba(0,0,0,0.5); padding: 15px; border-radius: 5px; text-align: left; overflow-x: auto;">
+// 在 main.js 的 choose() 函數中
+if(items[idx]==='How to Play'){
+  const msg = [
+    'Basic Controls',
+    '',
+    '↑ Jump　← → Move',
+    '',
+    'Quiz Interaction',
+    '',
+    '↑ ↓ Navigate answer choices',
+    'Press Enter to answer or continue'
+  ].join('\n');
+  showDialog(msg, { pause: true });
+}</pre>
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <h2>📁 修改的文件</h2>
+            <ul style="text-align: left; display: inline-block;">
+                <li><code>main.js</code> - 更新"How to Play"說明內容</li>
+                <li>保持其他功能不變</li>
+                <li>只修改說明文字，不影響遊戲邏輯</li>
+            </ul>
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <h2>🧪 測試方法</h2>
+            <p>1. 打開遊戲 <code>index.html</code></p>
+            <p>2. 在主選單選擇"How to Play"</p>
+            <p>3. 觀察新的控制說明格式</p>
+            <p>4. 確認說明內容更清晰易讀</p>
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <h2>🎯 改進效果</h2>
+            <ul style="text-align: left; display: inline-block;">
+                <li>📖 <strong>更易讀</strong>: 分類清晰，重點突出</li>
+                <li>🎮 <strong>更實用</strong>: 只保留必要的操作說明</li>
+                <li>✨ <strong>更美觀</strong>: 整潔的排版格式</li>
+                <li>🚀 <strong>更快速</strong>: 玩家能快速理解操作</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        console.log('🧪 控制說明更新測試頁面已加載');
+        console.log('🎮 新的控制說明格式：');
+        console.log('• Basic Controls: ↑ Jump　← → Move');
+        console.log('• Quiz Interaction: ↑ ↓ Navigate, Enter to continue');
+        console.log('📱 在實際遊戲中測試新的說明格式！');
+    </script>
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>音樂調試頁面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .debug-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 4px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .error { color: #dc3545; }
+        .success { color: #28a745; }
+        .warning { color: #ffc107; }
+        .info { color: #17a2b8; }
+    </style>
+</head>
+<body>
+    <h1>🔍 音樂調試頁面</h1>
+    
+    <div class="debug-section">
+        <h2>🎵 音樂控制</h2>
+        <button onclick="testMusic()">測試音樂</button>
+        <button onclick="playMusic()">播放音樂</button>
+        <button onclick="pauseMusic()">暫停音樂</button>
+        <button onclick="checkStatus()">檢查狀態</button>
+        <button onclick="clearLog()">清除日誌</button>
+    </div>
+    
+    <div class="debug-section">
+        <h2>📊 音樂狀態</h2>
+        <div id="status">未初始化</div>
+    </div>
+    
+    <div class="debug-section">
+        <h2>📝 調試日誌</h2>
+        <div id="log" class="log"></div>
+    </div>
+
+    <script>
+        let bgMusic = null;
+        let bgMusicVolume = 0.3;
+        
+        function log(message, type = 'info') {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type;
+            logDiv.innerHTML += `<span class="${className}">[${timestamp}] ${message}</span>\n`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(message);
+        }
+        
+        function clearLog() {
+            document.getElementById('log').innerHTML = '';
+        }
+        
+        function updateStatus(message) {
+            document.getElementById('status').innerHTML = message;
+        }
+        
+        // 測試音樂功能
+        function testMusic() {
+            log('🧪 開始測試音樂功能...', 'info');
+            
+            try {
+                // 檢查音樂文件是否存在
+                log('檢查音樂文件路徑: music/game_bgm.mp3', 'info');
+                
+                // 創建音頻對象
+                bgMusic = new Audio('music/game_bgm.mp3');
+                log('✅ 音頻對象創建成功', 'success');
+                
+                // 設置屬性
+                bgMusic.loop = true;
+                bgMusic.volume = bgMusicVolume;
+                bgMusic.preload = 'auto';
+                log('✅ 音頻屬性設置完成', 'success');
+                
+                // 添加事件監聽器
+                bgMusic.addEventListener('loadstart', () => {
+                    log('🔄 開始加載音樂', 'info');
+                });
+                
+                bgMusic.addEventListener('loadeddata', () => {
+                    log('📦 音樂數據加載完成', 'success');
+                });
+                
+                bgMusic.addEventListener('canplay', () => {
+                    log('🎯 音樂可以播放', 'success');
+                });
+                
+                bgMusic.addEventListener('canplaythrough', () => {
+                    log('✅ 音樂完全加載完成', 'success');
+                });
+                
+                bgMusic.addEventListener('play', () => {
+                    log('🎵 音樂開始播放', 'success');
+                });
+                
+                bgMusic.addEventListener('pause', () => {
+                    log('⏸️ 音樂已暫停', 'warning');
+                });
+                
+                bgMusic.addEventListener('ended', () => {
+                    log('🔚 音樂播放結束', 'info');
+                });
+                
+                bgMusic.addEventListener('error', (e) => {
+                    log('❌ 音樂加載錯誤: ' + e.message, 'error');
+                    log('錯誤詳情: ' + JSON.stringify({
+                        error: e.type,
+                        target: e.target ? {
+                            currentSrc: e.target.currentSrc,
+                            networkState: e.target.networkState,
+                            readyState: e.target.readyState
+                        } : 'null'
+                    }, null, 2), 'error');
+                });
+                
+                log('🎵 音樂初始化完成，等待加載...', 'success');
+                updateStatus('音樂已初始化，等待加載...');
+                
+            } catch (e) {
+                log('❌ 創建音頻對象失敗: ' + e.message, 'error');
+                updateStatus('音樂初始化失敗');
+            }
+        }
+        
+        // 播放音樂
+        function playMusic() {
+            if (!bgMusic) {
+                log('❌ 音樂尚未初始化', 'error');
+                return;
+            }
+            
+            log('🎵 嘗試播放音樂...', 'info');
+            log('音樂狀態: ' + JSON.stringify({
+                readyState: bgMusic.readyState,
+                networkState: bgMusic.networkState,
+                paused: bgMusic.paused,
+                currentSrc: bgMusic.currentSrc
+            }, null, 2), 'info');
+            
+            bgMusic.play().then(() => {
+                log('🎵 音樂播放成功！', 'success');
+                updateStatus('音樂正在播放');
+            }).catch(e => {
+                log('❌ 播放失敗: ' + e.name + ' - ' + e.message, 'error');
+                
+                if (e.name === 'NotAllowedError') {
+                    log('⚠️ 這是瀏覽器的自動播放限制，需要用戶交互', 'warning');
+                    log('💡 解決方法：點擊頁面任意位置後再試', 'info');
+                }
+                
+                updateStatus('播放失敗: ' + e.message);
+            });
+        }
+        
+        // 暫停音樂
+        function pauseMusic() {
+            if (bgMusic) {
+                bgMusic.pause();
+                log('⏸️ 音樂已暫停', 'warning');
+                updateStatus('音樂已暫停');
+            } else {
+                log('❌ 音樂尚未初始化', 'error');
+            }
+        }
+        
+        // 檢查狀態
+        function checkStatus() {
+            if (!bgMusic) {
+                log('❌ 音樂尚未初始化', 'error');
+                updateStatus('音樂未初始化');
+                return;
+            }
+            
+            const status = {
+                readyState: bgMusic.readyState,
+                networkState: bgMusic.networkState,
+                paused: bgMusic.paused,
+                currentSrc: bgMusic.currentSrc,
+                volume: bgMusic.volume,
+                loop: bgMusic.loop,
+                duration: bgMusic.duration,
+                currentTime: bgMusic.currentTime
+            };
+            
+            log('📊 音樂狀態檢查:', 'info');
+            log(JSON.stringify(status, null, 2), 'info');
+            
+            // 解釋狀態
+            const readyStateText = {
+                0: 'HAVE_NOTHING - 沒有音頻/視頻數據',
+                1: 'HAVE_METADATA - 有元數據',
+                2: 'HAVE_CURRENT_DATA - 有當前播放位置的數據',
+                3: 'HAVE_FUTURE_DATA - 有當前播放位置和後續數據',
+                4: 'HAVE_ENOUGH_DATA - 有足夠數據開始播放'
+            };
+            
+            const networkStateText = {
+                0: 'NETWORK_EMPTY - 尚未初始化',
+                1: 'NETWORK_IDLE - 網絡空閒',
+                2: 'NETWORK_LOADING - 正在加載',
+                3: 'NETWORK_NO_SOURCE - 沒有音頻/視頻源'
+            };
+            
+            log(`準備狀態: ${readyStateText[status.readyState] || '未知'}`, 'info');
+            log(`網絡狀態: ${networkStateText[status.networkState] || '未知'}`, 'info');
+            
+            updateStatus(`狀態: ${readyStateText[status.readyState] || '未知'}`);
+        }
+        
+        // 頁面加載完成後自動測試
+        window.addEventListener('load', () => {
+            log('🚀 頁面加載完成，開始音樂測試...', 'info');
+            testMusic();
+        });
+        
+        // 點擊頁面任意位置嘗試播放音樂
+        document.addEventListener('click', () => {
+            if (bgMusic && bgMusic.paused && bgMusic.readyState >= 2) {
+                log('🖱️ 檢測到用戶點擊，嘗試播放音樂...', 'info');
+                playMusic();
+            }
+        });
+    </script>
+</body>
+</html>

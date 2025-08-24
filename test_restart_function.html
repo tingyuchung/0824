@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>再挑戰一次功能測試</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div style="text-align: center; padding: 50px; color: white; text-shadow: 2px 2px 0 #000;">
+        <h1>🎮 再挑戰一次功能測試</h1>
+        <p>這個頁面測試分數0~3分結局中的"再挑戰一次"功能</p>
+        
+        <div style="margin: 30px 0;">
+            <h2>📋 功能說明</h2>
+            <p>在分數0~3分的結局中：</p>
+            <ul style="text-align: left; display: inline-block;">
+                <li>✅ 會顯示"再挑戰一次"選項</li>
+                <li>✅ 點擊"再挑戰一次"會重新開始遊戲</li>
+                <li>✅ 按Enter鍵也會觸發重新開始</li>
+                <li>✅ 支持鍵盤和滑鼠操作</li>
+            </ul>
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <h2>🎯 測試方法</h2>
+            <p>1. 打開遊戲 <code>index.html</code></p>
+            <p>2. 故意答錯問題，讓分數降到3分以下</p>
+            <p>3. 在結局畫面點擊"再挑戰一次"</p>
+            <p>4. 確認遊戲重新開始</p>
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <h2>🔧 技術實現</h2>
+            <p><strong>新增功能：</strong></p>
+            <ul style="text-align: left; display: inline-block;">
+                <li>為"再挑戰一次"選項添加點擊區域</li>
+                <li>處理滑鼠點擊事件</li>
+                <li>調用 <code>restartGame()</code> 函數</li>
+                <li>支持鍵盤Enter鍵操作</li>
+            </ul>
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <h2>📁 修改的文件</h2>
+            <ul style="text-align: left; display: inline-block;">
+                <li><code>main.js</code> - 添加點擊區域和事件處理</li>
+                <li>支持Game Over模式和生氣結局模式</li>
+            </ul>
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <h2>🎨 視覺效果</h2>
+            <p>• "再挑戰一次"選項有閃爍效果</p>
+            <p>• 支持鍵盤和滑鼠操作</p>
+            <p>• 點擊後立即重新開始遊戲</p>
+        </div>
+    </div>
+
+    <script>
+        // 模擬遊戲狀態
+        const state = {
+            mode: 'end',
+            paused: false
+        };
+
+        // 模擬結局狀態
+        const ending = {
+            active: true,
+            hearts: 2, // 低分數
+            gameOverMode: true,
+            phase: 'gameOver',
+            menuOptions: ['再挑戰一次'],
+            menuAlpha: 1,
+            typewriterText: '再挑戰一次',
+            typewriterIndex: 10,
+            gameOverTimer: 3000,
+            keyPressed: false
+        };
+
+        // 模擬重新開始遊戲函數
+        function restartGame() {
+            alert('🎮 遊戲重新開始！\n\n這表示"再挑戰一次"功能正常工作！\n\n在實際遊戲中，這會：\n• 重置所有遊戲狀態\n• 重新開始計時\n• 重置愛心數量\n• 重新開始遊戲循環');
+        }
+
+        // 模擬鍵盤事件
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !ending.keyPressed) {
+                ending.keyPressed = true;
+                restartGame();
+            }
+            
+            if (!e.key === 'Enter') {
+                ending.keyPressed = false;
+            }
+        });
+
+        console.log('🧪 測試頁面已加載');
+        console.log('📱 在實際遊戲中測試：');
+        console.log('1. 故意答錯問題讓分數降到3分以下');
+        console.log('2. 在結局畫面點擊"再挑戰一次"');
+        console.log('3. 確認遊戲重新開始');
+    </script>
+</body>
+</html>

@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>觸控修復測試</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(#a7eaff, #f0f8ff);
+            min-height: 100vh;
+        }
+        
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .test-section {
+            margin: 24px 0;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+        
+        .test-section h2 {
+            color: #333;
+            margin-top: 0;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 8px;
+        }
+        
+        .dialog-simulator {
+            background: #e3f2fd;
+            border: 2px solid #2196f3;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 16px 0;
+            text-align: center;
+        }
+        
+        .question-simulator {
+            background: #fff3e0;
+            border: 2px solid #ff9800;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 16px 0;
+            text-align: center;
+        }
+        
+        .game-over-simulator {
+            background: #fce4ec;
+            border: 2px solid #e91e63;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 16px 0;
+            text-align: center;
+        }
+        
+        .dialog-box {
+            background: #fdfdfd;
+            border: 4px solid #000;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 16px 0;
+            display: none;
+        }
+        
+        .dialog-box.show {
+            display: block;
+        }
+        
+        .dialog-text {
+            font-size: 18px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .dialog-ok {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        .question-modal {
+            background: #fdfdfd;
+            border: 4px solid #000;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 16px 0;
+            display: none;
+        }
+        
+        .question-modal.show {
+            display: block;
+        }
+        
+        .question-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .question-option {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 6px;
+            padding: 12px 16px;
+            margin: 8px 0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .question-option:hover {
+            background: #e9ecef;
+            border-color: #adb5bd;
+        }
+        
+        .question-option.selected {
+            background: #007bff;
+            color: white;
+            border-color: #0056b3;
+        }
+        
+        .game-over-screen {
+            background: #fdfdfd;
+            border: 4px solid #000;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 16px 0;
+            display: none;
+            text-align: center;
+        }
+        
+        .game-over-screen.show {
+            display: block;
+        }
+        
+        .game-over-title {
+            font-size: 24px;
+            color: #e91e63;
+            margin-bottom: 16px;
+            font-weight: bold;
+        }
+        
+        .restart-button {
+            background: #e91e63;
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 8px;
+            font-size: 18px;
+            cursor: pointer;
+            margin: 16px 0;
+        }
+        
+        .status-display {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 16px;
+            margin: 16px 0;
+            font-family: monospace;
+        }
+        
+        .touch-hint {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-radius: 6px;
+            padding: 12px;
+            margin: 16px 0;
+            color: #0c5460;
+        }
+        
+        @media (max-width: 768px) {
+            .test-container {
+                margin: 10px;
+                padding: 16px;
+            }
+            
+            .dialog-text, .question-title {
+                font-size: 16px;
+            }
+            
+            .dialog-ok, .restart-button {
+                min-height: 48px;
+                min-width: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>📱 觸控修復測試</h1>
+        
+        <div class="touch-hint">
+            <strong>📱 觸控提示：</strong> 在手機上觸控以下按鈕和選項來測試觸控功能是否正常工作
+        </div>
+        
+        <div class="test-section">
+            <h2>🎭 對話選項測試</h2>
+            <div class="dialog-simulator">
+                <h3>Coco 對話模擬</h3>
+                <p>點擊下方按鈕來模擬與 Coco 的對話</p>
+                <button onclick="showDialog()" style="background: #28a745; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-size: 16px; cursor: pointer;">開始對話</button>
+                
+                <div id="dialog-box" class="dialog-box">
+                    <div class="dialog-text">
+                        嗨！我是 Coco！很高興見到你！<br>
+                        你想要和我聊天嗎？
+                    </div>
+                    <button class="dialog-ok" onclick="closeDialog()">OK</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>❓ 問題選項測試</h2>
+            <div class="question-simulator">
+                <h3>問題選項模擬</h3>
+                <p>點擊下方按鈕來模擬問題選項</p>
+                <button onclick="showQuestion()" style="background: #ffc107; color: #212529; border: none; padding: 12px 24px; border-radius: 6px; font-size: 16px; cursor: pointer;">顯示問題</button>
+                
+                <div id="question-modal" class="question-modal">
+                    <div class="question-title">你喜歡什麼顏色？</div>
+                    <div class="question-option" onclick="selectOption(0)">藍色</div>
+                    <div class="question-option selected" onclick="selectOption(1)">紅色</div>
+                    <div class="question-option" onclick="selectOption(2)">綠色</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🎮 遊戲結束測試</h2>
+            <div class="game-over-simulator">
+                <h3>遊戲結束模擬</h3>
+                <p>點擊下方按鈕來模擬遊戲結束畫面</p>
+                <button onclick="showGameOver()" style="background: #dc3545; color: white; border: none; padding: 12px 24px; border-radius: 6px; font-size: 16px; cursor: pointer;">遊戲結束</button>
+                
+                <div id="game-over-screen" class="game-over-screen">
+                    <div class="game-over-title">GAME OVER</div>
+                    <p>你撞到小男孩了！要重玩一遍嗎？</p>
+                    <button class="restart-button" onclick="restartGame()">再挑戰一次</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>📊 測試狀態</h2>
+            <div class="status-display">
+                <div><strong>當前狀態:</strong> <span id="current-state">等待測試</span></div>
+                <div><strong>觸控檢測:</strong> <span id="touch-status">檢測中...</span></div>
+                <div><strong>最後操作:</strong> <span id="last-action">無</span></div>
+                <div><strong>測試結果:</strong> <span id="test-result">未開始</span></div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🧪 測試說明</h2>
+            <div style="background: #f8f9fa; padding: 16px; border-radius: 6px;">
+                <h3>測試步驟：</h3>
+                <ol>
+                    <li><strong>對話測試</strong>：點擊"開始對話"按鈕，然後觸控對話框中的"OK"按鈕</li>
+                    <li><strong>問題測試</strong>：點擊"顯示問題"按鈕，然後觸控問題選項</li>
+                    <li><strong>遊戲結束測試</strong>：點擊"遊戲結束"按鈕，然後觸控"再挑戰一次"按鈕</li>
+                </ol>
+                
+                <h3>預期結果：</h3>
+                <ul>
+                    <li>✅ 所有觸控操作都應該有響應</li>
+                    <li>✅ 觸控後應該顯示相應的狀態變化</li>
+                    <li>✅ 觸控反饋應該即時且準確</li>
+                </ul>
+                
+                <h3>手機測試重點：</h3>
+                <ul>
+                    <li>📱 觸控靈敏度是否正常</li>
+                    <li>📱 觸控目標大小是否適合手指</li>
+                    <li>📱 觸控反饋是否清晰</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 觸控檢測
+        function detectTouchSupport() {
+            const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            document.getElementById('touch-status').textContent = hasTouch ? '✅ 支援觸控' : '❌ 不支援觸控';
+            return hasTouch;
+        }
+        
+        // 更新狀態顯示
+        function updateStatus(state, action) {
+            document.getElementById('current-state').textContent = state;
+            document.getElementById('last-action').textContent = action;
+        }
+        
+        // 顯示對話
+        function showDialog() {
+            document.getElementById('dialog-box').classList.add('show');
+            updateStatus('對話模式', '顯示對話');
+            document.getElementById('test-result').textContent = '對話已顯示，請觸控 OK 按鈕';
+        }
+        
+        // 關閉對話
+        function closeDialog() {
+            document.getElementById('dialog-box').classList.remove('show');
+            updateStatus('等待測試', '關閉對話');
+            document.getElementById('test-result').textContent = '✅ 對話觸控測試通過！';
+        }
+        
+        // 顯示問題
+        function showQuestion() {
+            document.getElementById('question-modal').classList.add('show');
+            updateStatus('問題模式', '顯示問題');
+            document.getElementById('test-result').textContent = '問題已顯示，請觸控選項';
+        }
+        
+        // 選擇選項
+        function selectOption(index) {
+            const options = document.querySelectorAll('.question-option');
+            options.forEach((opt, i) => {
+                opt.classList.toggle('selected', i === index);
+            });
+            
+            updateStatus('問題模式', `選擇選項 ${index + 1}`);
+            document.getElementById('test-result').textContent = `✅ 選項 ${index + 1} 觸控測試通過！`;
+            
+            // 延遲關閉問題
+            setTimeout(() => {
+                document.getElementById('question-modal').classList.remove('show');
+                updateStatus('等待測試', '關閉問題');
+            }, 1000);
+        }
+        
+        // 顯示遊戲結束
+        function showGameOver() {
+            document.getElementById('game-over-screen').classList.add('show');
+            updateStatus('遊戲結束模式', '顯示遊戲結束');
+            document.getElementById('test-result').textContent = '遊戲結束畫面已顯示，請觸控"再挑戰一次"按鈕';
+        }
+        
+        // 重新開始遊戲
+        function restartGame() {
+            document.getElementById('game-over-screen').classList.remove('show');
+            updateStatus('等待測試', '重新開始遊戲');
+            document.getElementById('test-result').textContent = '✅ 遊戲結束觸控測試通過！';
+        }
+        
+        // 觸控事件處理
+        function initTouchEvents() {
+            if (detectTouchSupport()) {
+                // 為所有可點擊元素添加觸控事件
+                const clickableElements = document.querySelectorAll('button, .question-option');
+                
+                clickableElements.forEach(element => {
+                    element.addEventListener('touchstart', (e) => {
+                        e.preventDefault();
+                        element.style.transform = 'scale(0.95)';
+                        element.style.transition = 'transform 0.1s ease';
+                    });
+                    
+                    element.addEventListener('touchend', (e) => {
+                        e.preventDefault();
+                        element.style.transform = 'scale(1)';
+                    });
+                });
+                
+                console.log('📱 觸控事件已初始化');
+            }
+        }
+        
+        // 頁面加載完成後初始化
+        window.addEventListener('load', () => {
+            initTouchEvents();
+            updateStatus('等待測試', '頁面已加載');
+        });
+        
+        // 監聽觸控事件
+        document.addEventListener('touchstart', (e) => {
+            console.log('📱 觸控開始:', e.touches[0].clientX, e.touches[0].clientY);
+        });
+        
+        document.addEventListener('touchend', (e) => {
+            console.log('📱 觸控結束');
+        });
+    </script>
+</body>
+</html>

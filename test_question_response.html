@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>問題回答回覆效果測試</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="ui">
+        <div id="dialog" class="hidden">
+            <div class="inner pixel-border">
+                <div id="dialog-text" class="body"></div>
+                <button id="dialog-ok" class="pixel-btn">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align: center; padding: 50px; color: white; text-shadow: 2px 2px 0 #000;">
+        <h1>🎯 問題回答回覆效果測試</h1>
+        <p>點擊下面的按鈕來測試不同的回覆效果</p>
+        
+        <div style="margin: 30px 0;">
+            <button onclick="showCorrectResponse()" style="background: #90EE90; color: #000; padding: 15px 30px; border: 3px solid #000; font-size: 18px; cursor: pointer; margin: 10px;">
+                ✅ 顯示正確答案回覆
+            </button>
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <button onclick="showWrongResponse()" style="background: #FFB6C1; color: #000; padding: 15px 30px; border: 3px solid #000; font-size: 18px; cursor: pointer; margin: 10px;">
+                ❌ 顯示錯誤答案回覆
+            </button>
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <button onclick="showCocoStyle()" style="background: #87CEEB; color: #000; padding: 15px 30px; border: 3px solid #000; font-size: 18px; cursor: pointer; margin: 10px;">
+                💬 顯示Coco風格對話
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // 模擬遊戲狀態
+        const state = {
+            inDialog: false,
+            paused: false
+        };
+
+        // 顯示正確答案回覆
+        function showCorrectResponse() {
+            const response = "答對~你的寶貝對冰淇淋一點抵抗力也沒有！";
+            showQuestionResponse(response, true);
+        }
+
+        // 顯示錯誤答案回覆
+        function showWrongResponse() {
+            const response = "布丁也不錯啦～但不是最喜歡的！";
+            showQuestionResponse(response, false);
+        }
+
+        // 顯示Coco風格對話
+        function showCocoStyle() {
+            const d = document.getElementById('dialog');
+            const dText = document.getElementById('dialog-text');
+            const ok = document.getElementById('dialog-ok');
+            
+            d.classList.remove('hidden');
+            d.classList.add('coco-dialog');
+            dText.classList.add('pixel-text');
+            ok.classList.add('pixel-btn');
+            
+            dText.innerText = "COCO：嘿嘿，不然你以為我平常偷偷在忙什麼？有沒有感受到滿滿的用心 ❤";
+            ok.innerText = '▼';
+            
+            ok.onclick = () => {
+                d.classList.add('hidden');
+                d.classList.remove('coco-dialog');
+                state.inDialog = false;
+                state.paused = false;
+            };
+            
+            state.inDialog = true;
+            state.paused = false;
+        }
+
+        // 顯示問題回答後的對應回覆（Coco風格）
+        function showQuestionResponse(response, isCorrect) {
+            const d = document.getElementById('dialog');
+            const dText = document.getElementById('dialog-text');
+            const ok = document.getElementById('dialog-ok');
+            
+            // 設置對話樣式
+            d.classList.remove('hidden');
+            d.classList.add('coco-dialog'); // 使用Coco對話的樣式
+            dText.classList.add('pixel-text');
+            ok.classList.add('pixel-btn');
+            
+            // 根據答案正確與否設置不同的樣式
+            if (isCorrect) {
+                d.classList.add('correct-response');
+                d.classList.remove('wrong-response');
+            } else {
+                d.classList.add('wrong-response');
+                d.classList.remove('correct-response');
+            }
+            
+            // 顯示回覆文字
+            dText.innerText = response;
+            ok.innerText = '▼';
+            
+            // 設置點擊事件
+            ok.onclick = () => {
+                d.classList.add('hidden');
+                d.classList.remove('coco-dialog', 'correct-response', 'wrong-response');
+                state.inDialog = false;
+                state.paused = false;
+            };
+            
+            // 設置狀態
+            state.inDialog = true;
+            state.paused = false;
+        }
+
+        // 添加鍵盤事件支持
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && state.inDialog) {
+                const ok = document.getElementById('dialog-ok');
+                if (ok) ok.click();
+            }
+        });
+    </script>
+</body>
+</html>

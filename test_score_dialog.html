@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>分數對話框測試</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div style="text-align: center; padding: 50px; color: white; text-shadow: 2px 2px 0 #000;">
+        <h1>🎯 分數對話框測試</h1>
+        <p>這個頁面展示更新後的分數顯示功能，採用與Coco對話一致的風格！</p>
+        
+        <div style="margin: 30px 0;">
+            <h2>📋 新的分數對話框</h2>
+            <div style="background: rgba(0,0,0,0.5); padding: 30px; border-radius: 10px; display: inline-block; text-align: left;">
+                <h3 style="color: #FFD700; margin: 0 0 20px 0;">🎮 分數顯示效果</h3>
+                <p style="margin: 10px 0; font-size: 18px;">• 觸發條件：碰到狗狗時</p>
+                <p style="margin: 10px 0; font-size: 18px;">• 顯示內容：你得了 X 分！</p>
+                <p style="margin: 10px 0; font-size: 18px;">• 視覺風格：與Coco對話一致</p>
+                <p style="margin: 10px 0; font-size: 18px;">• 按鈕樣式：▼ 符號</p>
+            </div>
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <h2>🔄 主要變化</h2>
+            <ul style="text-align: left; display: inline-block;">
+                <li>✅ <strong>風格統一</strong>: 與Coco對話使用相同的視覺效果</li>
+                <li>✅ <strong>無框框設計</strong>: 移除傳統的對話框樣式</li>
+                <li>✅ <strong>特殊顏色</strong>: 使用金色顯示分數，更加醒目</li>
+                <li>✅ <strong>互動一致</strong>: 支持Enter鍵和滑鼠點擊</li>
+            </ul>
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <h2>📝 詳細對比</h2>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin: 20px 0;">
+                <div style="background: rgba(255, 0, 0, 0.3); padding: 20px; border-radius: 10px; border: 2px solid #ff0000;">
+                    <h3>❌ 舊版本</h3>
+                    <p><strong>傳統對話框</strong></p>
+                    <ul style="text-align: left;">
+                        <li>有框框背景</li>
+                        <li>使用showDialog函數</li>
+                        <li>OK按鈕</li>
+                        <li>與其他對話不一致</li>
+                    </ul>
+                </div>
+                
+                <div style="background: rgba(0, 255, 0, 0.3); padding: 20px; border-radius: 10px; border: 2px solid #00ff00;">
+                    <h3>✅ 新版本</h3>
+                    <p><strong>Coco風格對話</strong></p>
+                    <ul style="text-align: left;">
+                        <li>無框框背景</li>
+                        <li>使用showScoreDialog函數</li>
+                        <li>▼ 按鈕</li>
+                        <li>與Coco對話風格一致</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <h2>🔧 技術實現</h2>
+            <p><strong>新增函數：</strong></p>
+            <pre style="background: rgba(0,0,0,0.5); padding: 15px; border-radius: 5px; text-align: left; overflow-x: auto;">
+// 顯示分數對話框（Coco風格）
+function showScoreDialog(scoreMsg) {
+  const d = document.getElementById('dialog');
+  const dText = document.getElementById('dialog-text');
+  const ok = document.getElementById('dialog-ok');
+  
+  // 設置對話樣式
+  d.classList.remove('hidden');
+  d.classList.add('coco-dialog'); // 使用Coco對話的樣式
+  dText.classList.add('pixel-text');
+  ok.classList.add('pixel-btn');
+  
+  // 添加分數對話的特殊樣式
+  d.classList.add('score-response');
+  
+  // 顯示分數文字
+  dText.innerText = scoreMsg;
+  ok.innerText = '▼';
+  
+  // 設置點擊事件
+  ok.onclick = () => {
+    d.classList.add('hidden');
+    d.classList.remove('coco-dialog', 'score-response');
+    state.inDialog = false;
+    state.paused = false;
+    
+    // 恢復背景音樂音量
+    restoreBackgroundMusicVolume();
+    
+    // 進入下一個階段
+    ending.phase = 'charFade';
+  };
+  
+  // 設置鍵盤事件
+  const onKey = (e) => {
+    if (e.key === 'Enter') {
+      ok.click();
+    }
+  };
+  window.addEventListener('keydown', onKey);
+  
+  // 設置狀態
+  state.inDialog = true;
+  state.paused = false;
+  
+  // 降低背景音樂音量
+  lowerBackgroundMusicVolume();
+}</pre>
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <h2>🎨 CSS樣式</h2>
+            <p><strong>新增樣式：</strong></p>
+            <pre style="background: rgba(0,0,0,0.5); padding: 15px; border-radius: 5px; text-align: left; overflow-x: auto;">
+/* 分數對話樣式 - 與coco-dialog風格一致 */
+#dialog.coco-dialog.score-response #dialog-text {
+  color: #FFD700; /* 金色，表示分數顯示 */
+  text-shadow: 2px 2px 0 #000;
+  font-weight: bold;
+}</pre>
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <h2>📁 修改的文件</h2>
+            <ul style="text-align: left; display: inline-block;">
+                <li><code>main.js</code> - 新增showScoreDialog函數</li>
+                <li><code>style.css</code> - 新增score-response樣式</li>
+                <li>修改triggerEnding中的分數顯示邏輯</li>
+            </ul>
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <h2>🧪 測試方法</h1>
+            <p>1. 打開遊戲 <code>index.html</code></p>
+            <p>2. 開始遊戲，收集愛心</p>
+            <p>3. 碰到狗狗觸發結局</p>
+            <p>4. 觀察新的分數對話框風格</p>
+            <p>5. 確認與Coco對話風格一致</p>
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <h2>🎯 改進效果</h2>
+            <ul style="text-align: left; display: inline-block;">
+                <li>🎨 <strong>視覺統一</strong>: 所有對話使用一致的風格</li>
+                <li>✨ <strong>無框設計</strong>: 更現代、更美觀的界面</li>
+                <li>🎮 <strong>體驗一致</strong>: 玩家不會感到突兀</li>
+                <li>🌟 <strong>分數醒目</strong>: 金色文字讓分數更突出</li>
+            </ul>
+        </div>
+        
+        <div style="margin: 30px 0;">
+            <h2>⚠️ 注意事項</h2>
+            <ul style="text-align: left; display: inline-block;">
+                <li>需要確保coco-dialog樣式已正確定義</li>
+                <li>分數對話框會自動進入下一個階段</li>
+                <li>支持鍵盤和滑鼠操作</li>
+                <li>背景音樂音量會自動調整</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        console.log('🧪 分數對話框測試頁面已加載');
+        console.log('🎯 新的分數顯示功能：');
+        console.log('• 使用showScoreDialog函數');
+        console.log('• 採用coco-dialog風格');
+        console.log('• 金色文字，無框框設計');
+        console.log('📱 在實際遊戲中測試新的分數對話框！');
+    </script>
+</body>
+</html>

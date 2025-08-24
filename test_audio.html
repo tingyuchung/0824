@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>背景音樂測試</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .volume-control {
+            margin: 10px 0;
+        }
+        input[type="range"] {
+            width: 200px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            background: #e9ecef;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎵 背景音樂功能測試</h1>
+    
+    <div class="test-section">
+        <h2>音樂控制</h2>
+        <button onclick="playMusic()">播放音樂</button>
+        <button onclick="pauseMusic()">暫停音樂</button>
+        <button onclick="stopMusic()">停止音樂</button>
+        <button onclick="resumeMusic()">恢復音樂</button>
+        
+        <div class="volume-control">
+            <label for="volume">音量控制:</label>
+            <input type="range" id="volume" min="0" max="100" value="30" onchange="changeVolume(this.value)">
+            <span id="volumeValue">30%</span>
+        </div>
+        
+        <div class="status" id="status">準備就緒</div>
+    </div>
+    
+    <div class="test-section">
+        <h2>音樂資訊</h2>
+        <p><strong>音樂文件:</strong> music/game_bgm.mp3</p>
+        <p><strong>文件大小:</strong> 41MB</p>
+        <p><strong>格式:</strong> MP3</p>
+        <p><strong>循環播放:</strong> 是</p>
+    </div>
+    
+    <div class="test-section">
+        <h2>使用說明</h2>
+        <ol>
+            <li>點擊「播放音樂」開始播放背景音樂</li>
+            <li>使用「暫停音樂」暫時停止播放</li>
+            <li>使用「恢復音樂」繼續播放</li>
+            <li>使用「停止音樂」完全停止並重置</li>
+            <li>調整音量滑桿來改變音量大小</li>
+        </ol>
+    </div>
+
+    <script>
+        let bgMusic = null;
+        let bgMusicVolume = 0.3;
+        
+        // 初始化背景音樂
+        function initBackgroundMusic() {
+            try {
+                bgMusic = new Audio('music/game_bgm.mp3');
+                bgMusic.loop = true; // 循環播放
+                bgMusic.volume = bgMusicVolume;
+                bgMusic.preload = 'auto';
+                
+                // 處理音頻加載錯誤
+                bgMusic.addEventListener('error', (e) => {
+                    updateStatus('❌ 背景音樂加載失敗: ' + e.message, 'error');
+                });
+                
+                // 處理音頻加載完成
+                bgMusic.addEventListener('canplaythrough', () => {
+                    updateStatus('✅ 背景音樂加載完成', 'success');
+                });
+                
+                // 處理播放開始
+                bgMusic.addEventListener('play', () => {
+                    updateStatus('🎵 音樂開始播放', 'success');
+                });
+                
+                // 處理播放暫停
+                bgMusic.addEventListener('pause', () => {
+                    updateStatus('⏸️ 音樂已暫停', 'info');
+                });
+                
+                // 處理播放結束
+                bgMusic.addEventListener('ended', () => {
+                    updateStatus('🔚 音樂播放結束', 'info');
+                });
+                
+                updateStatus('🎵 背景音樂初始化完成', 'success');
+            } catch (e) {
+                updateStatus('❌ 無法創建音頻對象: ' + e.message, 'error');
+            }
+        }
+        
+        // 播放背景音樂
+        function playMusic() {
+            if (bgMusic && bgMusic.readyState >= 2) {
+                bgMusic.play().then(() => {
+                    updateStatus('🎵 音樂播放成功', 'success');
+                }).catch(e => {
+                    updateStatus('❌ 播放失敗: ' + e.message, 'error');
+                });
+            } else {
+                updateStatus('⚠️ 音樂尚未準備好，請稍等', 'warning');
+            }
+        }
+        
+        // 暫停背景音樂
+        function pauseMusic() {
+            if (bgMusic) {
+                bgMusic.pause();
+                updateStatus('⏸️ 音樂已暫停', 'info');
+            }
+        }
+        
+        // 停止背景音樂
+        function stopMusic() {
+            if (bgMusic) {
+                bgMusic.pause();
+                bgMusic.currentTime = 0;
+                updateStatus('⏹️ 音樂已停止', 'info');
+            }
+        }
+        
+        // 恢復背景音樂
+        function resumeMusic() {
+            if (bgMusic && bgMusic.paused) {
+                bgMusic.play().then(() => {
+                    updateStatus('🎵 音樂恢復播放', 'success');
+                }).catch(e => {
+                    updateStatus('❌ 恢復播放失敗: ' + e.message, 'error');
+                });
+            } else {
+                updateStatus('⚠️ 音樂未在暫停狀態', 'warning');
+            }
+        }
+        
+        // 改變音量
+        function changeVolume(value) {
+            const volume = value / 100;
+            bgMusicVolume = volume;
+            if (bgMusic) {
+                bgMusic.volume = volume;
+            }
+            document.getElementById('volumeValue').textContent = value + '%';
+            updateStatus('🔊 音量已調整為 ' + value + '%', 'info');
+        }
+        
+        // 更新狀態顯示
+        function updateStatus(message, type) {
+            const status = document.getElementById('status');
+            status.textContent = message;
+            status.className = 'status';
+            
+            // 根據類型添加顏色
+            switch(type) {
+                case 'success':
+                    status.style.backgroundColor = '#d4edda';
+                    status.style.color = '#155724';
+                    status.style.border = '1px solid #c3e6cb';
+                    break;
+                case 'error':
+                    status.style.backgroundColor = '#f8d7da';
+                    status.style.color = '#721c24';
+                    status.style.border = '1px solid #f5c6cb';
+                    break;
+                case 'warning':
+                    status.style.backgroundColor = '#fff3cd';
+                    status.style.color = '#856404';
+                    status.style.border = '1px solid #ffeaa7';
+                    break;
+                case 'info':
+                    status.style.backgroundColor = '#d1ecf1';
+                    status.style.color = '#0c5460';
+                    status.style.border = '1px solid #bee5eb';
+                    break;
+            }
+        }
+        
+        // 頁面加載完成後初始化
+        window.addEventListener('load', () => {
+            initBackgroundMusic();
+        });
+    </script>
+</body>
+</html>

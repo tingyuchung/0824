@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coco 對話觸控測試</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(#a7eaff, #f0f8ff);
+            min-height: 100vh;
+        }
+        
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .test-section {
+            margin: 24px 0;
+            padding: 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+        
+        .test-section h2 {
+            color: #333;
+            margin-top: 0;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 8px;
+        }
+        
+        .coco-dialog-simulator {
+            background: #e3f2fd;
+            border: 2px solid #2196f3;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 16px 0;
+            text-align: center;
+        }
+        
+        .coco-dialog {
+            background: transparent;
+            border: none;
+            padding: 20px;
+            margin: 16px 0;
+            display: none;
+            text-align: center;
+        }
+        
+        .coco-dialog.show {
+            display: block;
+        }
+        
+        .coco-dialog-text {
+            color: #fff;
+            text-shadow: 2px 2px 0 #000;
+            font-size: 28px;
+            line-height: 36px;
+            margin-bottom: 20px;
+            white-space: pre-line;
+        }
+        
+        .coco-dialog-ok {
+            background: transparent;
+            border: none;
+            color: #fff;
+            text-shadow: 2px 2px 0 #000;
+            font-size: 28px;
+            padding: 0;
+            margin: 0;
+            cursor: pointer;
+            text-decoration: underline;
+            animation: arrowBlink 1.5s ease-in-out infinite;
+        }
+        
+        .option-selected {
+            animation: rpgCursorShake 0.8s ease-in-out infinite;
+            display: inline-block;
+            text-shadow: 2px 2px 0 #000;
+            color: #ffffff;
+            font-weight: bold;
+        }
+        
+        .symbol-left, .symbol-right {
+            animation: symbolBlink 1.5s ease-in-out infinite;
+            color: #ffffff;
+            text-shadow: 2px 2px 0 #000;
+            font-weight: bold;
+        }
+        
+        .status-display {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 16px;
+            margin: 16px 0;
+            font-family: monospace;
+        }
+        
+        .touch-hint {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-radius: 6px;
+            padding: 12px;
+            margin: 16px 0;
+            color: #0c5460;
+        }
+        
+        .test-button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 8px;
+        }
+        
+        .test-button:hover {
+            background: #218838;
+        }
+        
+        @keyframes arrowBlink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.3; }
+        }
+        
+        @keyframes rpgCursorShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-1px); }
+            75% { transform: translateX(1px); }
+        }
+        
+        @keyframes symbolBlink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.5; }
+        }
+        
+        @media (max-width: 768px) {
+            .test-container {
+                margin: 10px;
+                padding: 16px;
+            }
+            
+            .coco-dialog-text {
+                font-size: 20px;
+                line-height: 28px;
+            }
+            
+            .coco-dialog-ok {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🎭 Coco 對話觸控測試</h1>
+        
+        <div class="touch-hint">
+            <strong>📱 觸控提示：</strong> 在手機上觸控以下按鈕和選項來測試 Coco 對話觸控功能
+        </div>
+        
+        <div class="test-section">
+            <h2>🎯 測試目標</h2>
+            <p>這個測試頁面模擬遊戲中與 Coco 的對話，測試觸控功能是否正常工作。</p>
+            <ul>
+                <li>✅ 觸控對話選項進行選擇</li>
+                <li>✅ 觸控確認按鈕繼續對話</li>
+                <li>✅ 觸控反饋和視覺效果</li>
+            </ul>
+        </div>
+        
+        <div class="test-section">
+            <h2>🎭 Coco 對話模擬</h2>
+            <div class="coco-dialog-simulator">
+                <h3>對話階段測試</h3>
+                <p>點擊下方按鈕來測試不同的對話階段：</p>
+                
+                <button class="test-button" onclick="startIntro()">開始介紹</button>
+                <button class="test-button" onclick="showOptions()">顯示選項</button>
+                <button class="test-button" onclick="showResponse()">顯示回應</button>
+                <button class="test-button" onclick="resetDialog()">重置對話</button>
+                
+                <div id="coco-dialog" class="coco-dialog">
+                    <div id="coco-dialog-text" class="coco-dialog-text">
+                        歡迎來到 Johnny 的 28 歲生日冒險！
+                    </div>
+                    <button id="coco-dialog-ok" class="coco-dialog-ok">▼</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>📊 測試狀態</h2>
+            <div class="status-display">
+                <div><strong>當前階段:</strong> <span id="current-phase">未開始</span></div>
+                <div><strong>觸控檢測:</strong> <span id="touch-status">檢測中...</span></div>
+                <div><strong>最後操作:</strong> <span id="last-action">無</span></div>
+                <div><strong>測試結果:</strong> <span id="test-result">未開始</span></div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h2>🧪 測試說明</h2>
+            <div style="background: #f8f9fa; padding: 16px; border-radius: 6px;">
+                <h3>測試步驟：</h3>
+                <ol>
+                    <li><strong>開始介紹</strong>：點擊按鈕開始 Coco 的介紹對話</li>
+                    <li><strong>顯示選項</strong>：點擊按鈕顯示三個對話選項</li>
+                    <li><strong>觸控選項</strong>：觸控對話框中的選項進行選擇</li>
+                    <li><strong>觸控確認</strong>：觸控 ▼ 按鈕繼續對話</li>
+                    <li><strong>顯示回應</strong>：點擊按鈕顯示 Coco 的回應</li>
+                </ol>
+                
+                <h3>預期結果：</h3>
+                <ul>
+                    <li>✅ 觸控對話選項應該有響應</li>
+                    <li>✅ 觸控確認按鈕應該繼續對話</li>
+                    <li>✅ 選項應該有視覺反饋（閃爍、搖擺）</li>
+                    <li>✅ 觸控反饋應該即時且準確</li>
+                </ul>
+                
+                <h3>手機測試重點：</h3>
+                <ul>
+                    <li>📱 觸控選項是否靈敏</li>
+                    <li>📱 觸控確認按鈕是否正常</li>
+                    <li>📱 視覺效果是否清晰</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 對話數據
+        const dialogData = {
+            introLines: [
+                'COCO：嘿～你終於來啦！今天是你的 28 歲生日冒險之日！',
+                'COCO：我做了一個小小的挑戰送給你，準備好開始了嗎？'
+            ],
+            options: [
+                '哇！妳還特地準備了遊戲給我？',
+                '冒險？該不會有陷阱吧……',
+                '當然！我超期待的！'
+            ],
+            responses: {
+                0: 'COCO：嘿嘿，不然你以為我平常偷偷在忙什麼？有沒有感受到滿滿的用心 ❤',
+                1: 'COCO：被你發現了？不過就算有陷阱，我也會陪你 ❤',
+                2: 'COCO：就知道你會這麼說～果然是我的寶貝！'
+            }
+        };
+        
+        let currentPhase = 'none';
+        let lineIdx = 0;
+        let selectedOption = 0;
+        
+        // 觸控檢測
+        function detectTouchSupport() {
+            const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+            document.getElementById('touch-status').textContent = hasTouch ? '✅ 支援觸控' : '❌ 不支援觸控';
+            return hasTouch;
+        }
+        
+        // 更新狀態顯示
+        function updateStatus(phase, action, result) {
+            document.getElementById('current-phase').textContent = phase;
+            document.getElementById('last-action').textContent = action;
+            if (result) {
+                document.getElementById('test-result').textContent = result;
+            }
+        }
+        
+        // 開始介紹
+        function startIntro() {
+            currentPhase = 'intro';
+            lineIdx = 0;
+            selectedOption = 0;
+            
+            const dialog = document.getElementById('coco-dialog');
+            const dialogText = document.getElementById('coco-dialog-text');
+            const dialogOk = document.getElementById('coco-dialog-ok');
+            
+            dialog.classList.add('show');
+            dialogText.innerText = dialogData.introLines[lineIdx];
+            dialogOk.innerText = '▼';
+            dialogOk.onclick = advanceIntro;
+            
+            updateStatus('介紹階段', '開始介紹', '介紹已開始，請觸控 ▼ 按鈕繼續');
+        }
+        
+        // 繼續介紹
+        function advanceIntro() {
+            lineIdx++;
+            if (lineIdx < dialogData.introLines.length) {
+                const dialogText = document.getElementById('coco-dialog-text');
+                dialogText.innerText = dialogData.introLines[lineIdx];
+                updateStatus('介紹階段', '繼續介紹', '請觸控 ▼ 按鈕繼續');
+            } else {
+                showOptions();
+            }
+        }
+        
+        // 顯示選項
+        function showOptions() {
+            currentPhase = 'options';
+            selectedOption = 0;
+            
+            const dialogText = document.getElementById('coco-dialog-text');
+            const dialogOk = document.getElementById('coco-dialog-ok');
+            
+            const optionsHtml = dialogData.options.map((option, idx) => {
+                const selected = idx === selectedOption;
+                if (selected) {
+                    return `<span class="option-selected"><span class="symbol-left">></span> ${option} <span class="symbol-right"><</span></span>`;
+                } else {
+                    return `  ${option}  `;
+                }
+            }).join('<br>');
+            
+            dialogText.innerHTML = optionsHtml;
+            dialogOk.innerText = '▼';
+            dialogOk.onclick = selectOption;
+            
+            updateStatus('選項階段', '顯示選項', '選項已顯示，請觸控選項進行選擇');
+        }
+        
+        // 選擇選項
+        function selectOption() {
+            const dialogText = document.getElementById('coco-dialog-text');
+            const dialogOk = document.getElementById('coco-dialog-ok');
+            
+            dialogText.innerText = dialogData.responses[selectedOption];
+            dialogOk.innerText = '▼';
+            dialogOk.onclick = endDialog;
+            
+            updateStatus('回應階段', '選擇選項', `✅ 選項 ${selectedOption + 1} 觸控測試通過！`);
+        }
+        
+        // 結束對話
+        function endDialog() {
+            const dialog = document.getElementById('coco-dialog');
+            dialog.classList.remove('show');
+            updateStatus('未開始', '結束對話', '對話已結束，請重新開始測試');
+        }
+        
+        // 重置對話
+        function resetDialog() {
+            const dialog = document.getElementById('coco-dialog');
+            dialog.classList.remove('show');
+            currentPhase = 'none';
+            lineIdx = 0;
+            selectedOption = 0;
+            updateStatus('未開始', '重置對話', '對話已重置，請重新開始測試');
+        }
+        
+        // 觸控事件處理
+        function initTouchEvents() {
+            if (detectTouchSupport()) {
+                // 為對話框添加觸控事件
+                const dialog = document.getElementById('coco-dialog');
+                const dialogOk = document.getElementById('coco-dialog-ok');
+                
+                // 對話框觸控事件
+                dialog.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    console.log('📱 觸控對話框');
+                    
+                    if (currentPhase === 'options') {
+                        // 在選項階段，觸控對話框會選擇當前選中的選項
+                        console.log('📱 觸控選擇選項');
+                        selectOption();
+                    } else {
+                        // 在其他階段，觸控對話框會觸發確認按鈕
+                        console.log('📱 觸控觸發確認');
+                        if (dialogOk.onclick) {
+                            dialogOk.onclick();
+                        }
+                    }
+                });
+                
+                // 確認按鈕觸控事件
+                dialogOk.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    console.log('📱 觸控確認按鈕');
+                    if (dialogOk.onclick) {
+                        dialogOk.onclick();
+                    }
+                });
+                
+                console.log('📱 Coco 對話觸控事件已初始化');
+            }
+        }
+        
+        // 頁面加載完成後初始化
+        window.addEventListener('load', () => {
+            initTouchEvents();
+            updateStatus('未開始', '頁面已加載', '請開始測試');
+        });
+        
+        // 監聽觸控事件
+        document.addEventListener('touchstart', (e) => {
+            console.log('📱 觸控開始:', e.touches[0].clientX, e.touches[0].clientY);
+        });
+        
+        document.addEventListener('touchend', (e) => {
+            console.log('📱 觸控結束');
+        });
+    </script>
+</body>
+</html>
